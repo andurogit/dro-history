@@ -28,9 +28,18 @@ export const links: Route.LinksFunction = () => [
   },
 ];
 
+import fs from "node:fs";
+import path from "node:path";
+
 export async function loader({ request }: Route.LoaderArgs) {
+  // Vite의 glob 기능을 사용하여 빌드 타임에 파일 목록을 가져옵니다.
+  const glbFiles = Object.keys(import.meta.glob("/public/*.glb")).map(file => 
+    file.replace("/public", "")
+  );
+
   return {
     cookies: request.headers.get("Cookie") ?? "",
+    glbFiles,
   };
 }
 

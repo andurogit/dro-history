@@ -8,13 +8,15 @@ function easeOutCirc(x: number) {
   return Math.sqrt(1 - Math.pow(x - 1, 4))
 }
 
-const Mascot = () => {
+interface MascotProps {
+  glbPath?: string
+}
+
+const Mascot = ({ glbPath = '/mascot.glb' }: MascotProps) => {
   const refContainer = useRef<HTMLDivElement>(null)
   const [loading, setLoading] = useState(true)
   const refRenderer = useRef<THREE.WebGLRenderer>(null)
   
-  const urlMascotGLB = '/mascot.glb'
-
   const handleWindowResize = useCallback(() => {
     const { current: renderer } = refRenderer
     const { current: container } = refContainer
@@ -38,7 +40,6 @@ const Mascot = () => {
       })
       renderer.setPixelRatio(window.devicePixelRatio)
       renderer.setSize(scW, scH)
-      // THREE.sRGBEncoding -> THREE.SRGBColorSpace in newer versions
       renderer.outputColorSpace = THREE.SRGBColorSpace
       container.appendChild(renderer.domElement)
       refRenderer.current = renderer
@@ -70,7 +71,8 @@ const Mascot = () => {
       controls.autoRotate = true
       controls.target = target
 
-      loadGLTModel(scene, urlMascotGLB, {
+      setLoading(true)
+      loadGLTModel(scene, glbPath, {
         recieveShadow: false,
         castShadow: false
       }).then(() => {
@@ -108,7 +110,7 @@ const Mascot = () => {
         renderer.dispose()
       }
     }
-  }, [])
+  }, [glbPath])
 
   useEffect(() => {
     window.addEventListener('resize', handleWindowResize, false)
