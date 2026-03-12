@@ -44,6 +44,7 @@ const Main = ({ children }: MainProps) => {
               value={glbPath} 
               onChange={(e) => setGlbPath(e.target.value)}
               variant="filled"
+              aria-label="Select Mascot"
             >
               {glbFiles.map((file) => (
                 <option key={file} value={file}>
